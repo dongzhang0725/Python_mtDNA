@@ -15,8 +15,8 @@ def judge(seq):
         print('ERROR!neither nucleotide nor protein sequences!')
     return pattern    
 def sort_seq(seq):
-    list_seq = re.findall(r'(.{60})',seq)   #得到60个序列一个列表，但是最后多余的不包括
-    remainder = len(seq)%60  #求出余数
+    list_seq = re.findall(r'(.{60})',seq)   
+    remainder = len(seq)%60  
     if remainder == 0:
         align_seq = '\n'.join(list_seq) + '\n'
     else:
@@ -73,11 +73,11 @@ def main():
         statistics = 'Name,Lenth\n'
         count = 1
         while line != '':
-            while not line.startswith('>'):  #忽略fas文件前面的header
+            while not line.startswith('>'):  
                 line = f.readline()
-            name = line.strip('>').strip('\n').replace(' ','_') #将空格换为下划线，方便软件运行
+            name = line.strip('>').strip('\n').replace(' ','_') 
             seq = ''
-            line = f.readline()  #读到序列一行
+            line = f.readline()  
             while not line.startswith('>') and line != '':
                 seq += line.strip().replace(' ','')                    
                 line = f.readline()
