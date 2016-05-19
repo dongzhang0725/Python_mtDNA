@@ -2,6 +2,8 @@
 
 `Description:`Volume back translate AA sequences   
 
+`【python 3.4.3】`
+
 `Usage example:`
 
             1.python C:\Users\Administrator\Desktop\scripts\backtrans.py -AAin F:\software\mafft\mafft-win\pro -NUCin C:\Users\Administrator\Desktop\nuc -s fast a -c 2   【for folder】
@@ -29,6 +31,8 @@ optional arguments:
               -axt:     turn into axt format
               
               -stat:    generate statistics of the fasta file
+              
+`【python 3.4.3】`
 
 `Usage example:`
 
@@ -59,6 +63,8 @@ optional arguments:
 	-stat	generate statistics file
 	
 	-part	generate partition file
+	
+`【python 3.4.3】`
 
 The output file will be deposited in the directory of seq_matrix.py
 
