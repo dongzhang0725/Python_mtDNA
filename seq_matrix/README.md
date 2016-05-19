@@ -3,7 +3,7 @@
 `Description:` Concatenated muti-sequences into one file
 
 `optional arguments:`
-    -h	--help  show this help message and exit
+	-h	--help  show this help message and exit
 	
 	-f	FOLDER   input folder
 	
@@ -21,8 +21,8 @@
 	
 	-part	generate partition file
 
-    The output file will be deposited in the directory of seq_matrix.py
+The output file will be deposited in the directory of seq_matrix.py
 
-    examples:
+`Usage example:`
             1.python C:\Users\Administrator\Desktop\scripts\seq_matrix.py -f C:\Users\Administrator\Desktop\scripts\partitions -phy
             2.python C:\Users\Administrator\Desktop\scripts\seq_matrix.py -phy -nex -paml -fas -axt -stat -part   【On condition that there is a 'partitions' folder in the directory of seq_matrix.py】
