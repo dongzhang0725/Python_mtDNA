@@ -16,7 +16,7 @@ optional arguments:
   
   -axt  :      turn into axt format
   
-  -stat :     \tgenerate statistics of the fasta file
+  -stat :      generate statistics of the fasta file
 
 `Usage example:`
 
