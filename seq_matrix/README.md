@@ -22,6 +22,8 @@
 	
 	-part	generate partition file
 
+`【python 3.4.3】`
+
 The output file will be deposited in the directory of seq_matrix.py
 
 `Usage example:`
