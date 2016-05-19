@@ -18,6 +18,8 @@ optional arguments:
               
               -stat:    generate statistics of the fasta file
 
+`【python 3.4.3】`
+
 `Usage example:`
 
             1.python C:\Users\Administrator\Desktop\scripts\convertfmt.py -f C:\Users\Administrator\Desktop\scripts\demo.fasta -phy
