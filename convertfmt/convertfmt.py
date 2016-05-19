@@ -12,7 +12,7 @@ def judge(seq):
     elif PROTEIN:
         pattern = 'PROTEIN'
     else:
-        print('ERROR!即不是核苷酸也不是蛋白质序列')
+        print('ERROR!neither nucleotide nor protein sequences!')
     return pattern    
 def sort_seq(seq):
     list_seq = re.findall(r'(.{60})',seq)   #得到60个序列一个列表，但是最后多余的不包括
@@ -35,8 +35,9 @@ def save(phy,nex,paml,axt,statistics,inputfile,myargs):
     if myargs.axt:
         with open(inputfile.split('.')[0]+'.axt','w') as f4:
             f4.write(axt)
-    with open('statistics.csv','w') as f5:
-        f5.write(statistics)  
+    if myargs.stat:
+        with open(os.path.dirname(inputfile)+'./statistics.csv','w') as f5:
+            f5.write(statistics)  
 def parameter():
     parser = argparse.ArgumentParser(\
             formatter_class=argparse.RawTextHelpFormatter,\
@@ -45,9 +46,9 @@ def parameter():
             epilog = r'''
 examples:
         1.python C:\Users\Administrator\Desktop\scripts\convertfmt.py -f C:\Users\Administrator\Desktop\scripts\demo.fasta -phy
-        2.python C:\Users\Administrator\Desktop\scripts\convertfmt.py -f demo.fasta -phy -nex -paml -axt  
+        2.python C:\Users\Administrator\Desktop\scripts\convertfmt.py -f demo.fasta -phy -nex -paml -axt -stat 
             ''')
-    parser.add_argument('-f',dest ='file',help='input fasta file')
+    parser.add_argument('-f',dest ='file',help='input fasta file',required=True)
     parser.add_argument('-phy',dest ='phy',help='turn into phylip format',\
                         default=False,action='store_true')   
     parser.add_argument('-nex',dest ='nex',help='turn into nexus format',\
@@ -56,6 +57,8 @@ examples:
                         default=False,action='store_true') 
     parser.add_argument('-axt',dest ='axt',help='turn into axt format',\
                         default=False,action='store_true') 
+    parser.add_argument('-stat',dest ='stat',help='generate statistics of the fasta file',\
+                        default=False,action='store_true')
     myargs = parser.parse_args(sys.argv[1:])
     return myargs
 def main():
@@ -95,6 +98,6 @@ def main():
  
     
 if __name__ == '__main__':
-    import re,argparse,sys
+    import re,argparse,sys,os
     main()
     print('completed!')
