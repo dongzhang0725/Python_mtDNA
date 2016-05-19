@@ -16,19 +16,19 @@
 
 optional arguments:
 
-              -h: --help  show this help message and exit
+              -h:       --help  show this help message and exit
               
-              -f :     input fasta file
+              -f:       input fasta file
               
-              -phy :       turn into phylip format
+              -phy:     turn into phylip format
               
-              -nex  :      turn into nexus format
+              -nex:     turn into nexus format
               
-              -paml  :     turn into paml format
+              -paml:    turn into paml format
               
-              -axt  :      turn into axt format
+              -axt:     turn into axt format
               
-              -stat :      generate statistics of the fasta file
+              -stat:    generate statistics of the fasta file
 
 `Usage example:`
 
