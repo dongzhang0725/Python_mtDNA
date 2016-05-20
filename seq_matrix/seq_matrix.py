@@ -19,7 +19,7 @@ examples:
     1.python C:\Users\Administrator\Desktop\scripts\seq_matrix.py -f C:\Users\Administrator\Desktop\scripts\partitions -phy
     2.python C:\Users\Administrator\Desktop\scripts\seq_matrix.py -phy -nex -paml -fas -axt -stat -part   【On condition that there is a 'partitions' folder in the directory of %(prog)s】 
             ''')
-        parser.add_argument('-f',dest ='folder',help='input folder',\
+        parser.add_argument('-f',dest ='folder',help='input folder which include muti-sequences',\
                             default=os.path.dirname(os.path.abspath(__file__))+'/partitions')
         parser.add_argument('-phy',dest ='phy',help='generate phylip format',\
                             default=False,action='store_true')   
