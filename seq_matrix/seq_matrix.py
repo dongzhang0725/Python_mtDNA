@@ -20,7 +20,7 @@ examples:
     2.python C:\Users\Administrator\Desktop\scripts\seq_matrix.py -phy -nex -paml -fas -axt -stat -part   【On condition that there is a 'partitions' folder in the directory of %(prog)s】 
             ''')
         parser.add_argument('-f',dest ='folder',help='input folder',\
-                            default=os.path.dirname(sys.argv[0])+'./partitions')
+                            default=os.path.dirname(os.path.abspath(__file__))+'/partitions')
         parser.add_argument('-phy',dest ='phy',help='generate phylip format',\
                             default=False,action='store_true')   
         parser.add_argument('-nex',dest ='nex',help='generate nexus format',\
@@ -127,29 +127,44 @@ examples:
         return statistics,file,phy_file,nxs_file+';\nEND;\n',paml_file,axt_file 
     statistics,file,phy_file,nxs_file,paml_file,axt_file = complete()
     def save():
+        try:
+            os.mkdir(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out')
+        except:
+            pass
+        def remove_dir(path):
+            filelist=os.listdir(path)  
+            for f in filelist:
+                filepath = os.path.join( path, f )  
+                if os.path.isfile(filepath):  
+                    os.remove(filepath)  
+                    print(filepath+" removed!")
+                elif os.path.isdir(filepath):  
+                    shutil.rmtree(filepath,True)
+                    print("dir "+filepath+" removed!")
+        remove_dir(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out')
         if myargs.axt:
-            with open(os.path.dirname(sys.argv[0])+'./append.axt','w') as f1:
+            with open(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out/append.axt','w') as f1:
                 f1.write(axt_file)
         if myargs.fas:
-            with open(os.path.dirname(sys.argv[0])+'./append.fas','w') as f2:
+            with open(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out/append.fas','w') as f2:
                 f2.write(file)
         if myargs.stat:
-            with open(os.path.dirname(sys.argv[0])+'./statistics.csv','w') as f3:
+            with open(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out/statistics.csv','w') as f3:
                 f3.write(statistics.replace('\t',','))
         if myargs.partition:
-            with open(os.path.dirname(sys.argv[0])+'./partition.txt','w') as f4:
+            with open(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out/partition.txt','w') as f4:
                 f4.write(partition_style + bayes_style+partition_name)
         if myargs.phy:
-            with open(os.path.dirname(sys.argv[0])+'./append.phy','w') as f5:
+            with open(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out/append.phy','w') as f5:
                 f5.write(phy_file)
         if myargs.nex:
-            with open(os.path.dirname(sys.argv[0])+'./append.nex','w') as f6:
+            with open(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out/append.nex','w') as f6:
                 f6.write(nxs_file)
         if myargs.paml:
-            with open(os.path.dirname(sys.argv[0])+'./append.PML','w') as f7:
+            with open(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out/append.PML','w') as f7:
                 f7.write(paml_file)
     save()
 if __name__ == '__main__':   
-    import os,re,argparse,sys
+    import os,re,argparse,sys,shutil
     get_results()    
     print('completed!')
