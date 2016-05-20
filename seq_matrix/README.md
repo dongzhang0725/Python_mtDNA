@@ -6,7 +6,7 @@
 
 	-h	--help  show this help message and exit
 	
-	-f	FOLDER   input folder
+	-f	FOLDER   input folder which include muti-sequences
 	
 	-phy	generate phylip format
 	
