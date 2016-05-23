@@ -5,6 +5,7 @@ __date__  =  '2016年3月27日'
 __author__  =  'zhang dong;708986950@qq.com'
 
 def get_results():
+    scripts_path = os.path.dirname(sys.argv[0]) if os.path.dirname(sys.argv[0]) else '.'
     def parameter():
         parser = argparse.ArgumentParser(\
                 formatter_class=argparse.RawTextHelpFormatter,\
@@ -13,14 +14,14 @@ def get_results():
                 epilog = r'''
 【python 3.4.3】                
                 
-The output file will be deposited in the directory of %(prog)s
+The output file will be deposited in the dir seq_matrix_out
 
 examples:
     1.python C:\Users\Administrator\Desktop\scripts\seq_matrix.py -f C:\Users\Administrator\Desktop\scripts\partitions -phy
     2.python C:\Users\Administrator\Desktop\scripts\seq_matrix.py -phy -nex -paml -fas -axt -stat -part   【On condition that there is a 'partitions' folder in the directory of %(prog)s】 
             ''')
         parser.add_argument('-f',dest ='folder',help='input folder which include muti-sequences',\
-                            default=os.path.dirname(os.path.abspath(__file__))+'/partitions')
+                            default=scripts_path+'/partitions')
         parser.add_argument('-phy',dest ='phy',help='generate phylip format',\
                             default=False,action='store_true')   
         parser.add_argument('-nex',dest ='nex',help='generate nexus format',\
@@ -127,10 +128,6 @@ examples:
         return statistics,file,phy_file,nxs_file+';\nEND;\n',paml_file,axt_file 
     statistics,file,phy_file,nxs_file,paml_file,axt_file = complete()
     def save():
-        try:
-            os.mkdir(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out')
-        except:
-            pass
         def remove_dir(path):
             filelist=os.listdir(path)  
             for f in filelist:
@@ -141,27 +138,31 @@ examples:
                 elif os.path.isdir(filepath):  
                     shutil.rmtree(filepath,True)
                     print("dir "+filepath+" removed!")
-        remove_dir(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out')
+        try:
+            os.mkdir(scripts_path+'/seq_matrix_out')
+        except:
+            remove_dir(scripts_path+'/seq_matrix_out')
+            pass
         if myargs.axt:
-            with open(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out/append.axt','w') as f1:
+            with open(scripts_path+'/seq_matrix_out/append.axt','w') as f1:
                 f1.write(axt_file)
         if myargs.fas:
-            with open(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out/append.fas','w') as f2:
+            with open(scripts_path+'/seq_matrix_out/append.fas','w') as f2:
                 f2.write(file)
         if myargs.stat:
-            with open(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out/statistics.csv','w') as f3:
+            with open(scripts_path+'/seq_matrix_out/statistics.csv','w') as f3:
                 f3.write(statistics.replace('\t',','))
         if myargs.partition:
-            with open(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out/partition.txt','w') as f4:
+            with open(scripts_path+'/seq_matrix_out/partition.txt','w') as f4:
                 f4.write(partition_style + bayes_style+partition_name)
         if myargs.phy:
-            with open(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out/append.phy','w') as f5:
+            with open(scripts_path+'/seq_matrix_out/append.phy','w') as f5:
                 f5.write(phy_file)
         if myargs.nex:
-            with open(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out/append.nex','w') as f6:
+            with open(scripts_path+'/seq_matrix_out/append.nex','w') as f6:
                 f6.write(nxs_file)
         if myargs.paml:
-            with open(os.path.dirname(os.path.abspath(__file__))+'/seq_matrix_out/append.PML','w') as f7:
+            with open(scripts_path+'/seq_matrix_out/append.PML','w') as f7:
                 f7.write(paml_file)
     save()
 if __name__ == '__main__':   
