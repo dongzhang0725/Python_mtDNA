@@ -14,7 +14,7 @@ def get_results():
                 epilog = r'''
 【python 3.4.3】                
                 
-The output file will be deposited in the dir seq_matrix_out
+The output file will be deposited in the dir of seq_matrix_out
 
 examples:
     1.python C:\Users\Administrator\Desktop\scripts\seq_matrix.py -f C:\Users\Administrator\Desktop\scripts\partitions -phy
