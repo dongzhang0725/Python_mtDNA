@@ -1,37 +1,47 @@
 #coding = utf-8
 #!/usr/bin/env python
-from email.policy import default
 
 __date__  =  '2016年4月3日'
 __author__  =  'zhang dong;708986950@qq.com'
 
 def get_files(myargs):
     if os.path.isdir(myargs.AAin) and os.path.isdir(myargs.NUCin):
-        pro_file = list(map(lambda x:myargs.AAin+'/'+x,os.listdir(myargs.AAin)))  #得到pro每个文件全路径
-        nuc_file = list(map(lambda x:myargs.NUCin+'/'+x,os.listdir(myargs.NUCin)))  #得到nuc每个文件全路径
+        pro_file = list(map(lambda x:myargs.AAin+'/'+x,os.listdir(myargs.AAin))) 
+        nuc_file = list(map(lambda x:myargs.NUCin+'/'+x,os.listdir(myargs.NUCin)))
         inputfiles = list(map(lambda x,y:x+' '+y,pro_file,nuc_file))
-    elif os.path.isfile(myargs.AAin) and os.path.isfile(myargs.NUCin):  #传入单个文件的情况
-        inputfiles = [myargs.AAin + ' ' + myargs.NUCin] #必须转为列表，因为main()有for循环
+    elif os.path.isfile(myargs.AAin) and os.path.isfile(myargs.NUCin):
+        inputfiles = [myargs.AAin + ' ' + myargs.NUCin]
     else:
         print('Input format error!') 
     return inputfiles
+
+def remove_dir(path):
+    filelist=os.listdir(path)  
+    for f in filelist:
+        filepath = os.path.join( path, f )  
+        if os.path.isfile(filepath):  
+            os.remove(filepath)  
+            print(filepath+" removed!")
+        elif os.path.isdir(filepath):  
+            shutil.rmtree(filepath,True)
+            print("dir "+filepath+" removed!")
+            
 def main(myargs):
-    os.chdir(os.path.dirname(sys.argv[0])) #路径切换到脚本所在文件夹
-    input_files = get_files(myargs) #得到pro和nuc输入文件的列表
+    scripts_path = os.path.dirname(sys.argv[0]) if os.path.dirname(sys.argv[0]) else '.'
+    input_files = get_files(myargs)
     try:
-        os.mkdir('output')
+        os.mkdir(scripts_path + '/BackTrans_out')
     except:
+        remove_dir(scripts_path + '/BackTrans_out')
         pass
     for each in input_files:
-        #以核苷酸文件名命名输出名
         commands = 'perl pal2nal.pl '+each+\
         ' -output '+myargs.style + ' -codontable ' +myargs.codontable \
-        + ' > '+ './output/'+each.split()[1].split('/')[-1]\
+        + ' > '+ scripts_path + '/BackTrans_out/'+each.split()[1].split('/')[-1]\
         +myargs.nogap+myargs.nomismatch+myargs.blockonly
-        #这里each[1]是一个全路径:C:\Users\Administrator\Desktop\scripts/nuc/NAD6.fas
-        #print('commands=%s'%commands)
         os.system(commands)
 def parameter():
+    scripts_path = os.path.dirname(sys.argv[0]) if os.path.dirname(sys.argv[0]) else '.'
     parser = argparse.ArgumentParser(\
 formatter_class=argparse.RawTextHelpFormatter,\
 prog = 'BackTrans.py',\
@@ -75,10 +85,10 @@ default='1')
     parser.add_argument('-AAin',dest='AAin',\
 help='''the path of folder of AA sequences
 【just drag and drop the folder or file onto the command prompt】''',\
-default=os.path.dirname(sys.argv[0])+'/pro')
+default=scripts_path+'/AA')
     parser.add_argument('-NUCin',dest='NUCin',\
 help='the path of folder of nucleotide sequences',\
-default=os.path.dirname(sys.argv[0])+'/nuc')
+default=scripts_path+'/NUC')
     parser.add_argument('-nogap',dest='nogap',\
 help='remove columns with gaps and inframe stop codons',default='',\
 const=' -nogap',action='store_const')
@@ -94,7 +104,7 @@ const=' -blockonly',action='store_const',default='')
     return myargs
 
 if __name__ == '__main__':
-    import os,sys,argparse
+    import os,sys,argparse,shutil
     myargs = parameter()
     main(myargs)
     print('completed!')
