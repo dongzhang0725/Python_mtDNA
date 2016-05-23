@@ -24,7 +24,7 @@
 
 `【python 3.4.3】`
 
-The output file will be deposited in the directory of seq_matrix.py
+The output file will be deposited in the dir of seq_matrix_out
 
 `Usage example:`
 
