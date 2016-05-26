@@ -14,7 +14,7 @@ def judge(seq):
     else:
         print('ERROR!neither nucleotide nor protein sequences!')
     return pattern    
-def sort_seq(seq):
+def align(seq):  
     list_seq = re.findall(r'(.{60})',seq)   
     remainder = len(seq)%60  
     if remainder == 0:
@@ -24,16 +24,16 @@ def sort_seq(seq):
     return align_seq
 def save(phy,nex,paml,axt,statistics,inputfile,myargs):
     if myargs.phy:
-        with open(inputfile.split('.')[0]+'.phy','w') as f1:
+        with open(os.path.dirname(inputfile)+'/'+os.path.basename(inputfile).split('.')[0]+'.phy','w') as f1:
             f1.write(phy)
     if myargs.nex:
-        with open(inputfile.split('.')[0]+'.nex','w') as f2:
+        with open(os.path.dirname(inputfile)+'/'+os.path.basename(inputfile).split('.')[0]+'.nex','w') as f2:
             f2.write(nex)
     if myargs.paml:
-        with open(inputfile.split('.')[0]+'.PML','w') as f3:
+        with open(os.path.dirname(inputfile)+'/'+os.path.basename(inputfile).split('.')[0]+'.PML','w') as f3:
             f3.write(paml)
     if myargs.axt:
-        with open(inputfile.split('.')[0]+'.axt','w') as f4:
+        with open(os.path.dirname(inputfile)+'/'+os.path.basename(inputfile).split('.')[0]+'.axt','w') as f4:
             f4.write(axt)
     if myargs.stat:
         with open(os.path.dirname(inputfile)+'./statistics.csv','w') as f5:
@@ -84,7 +84,7 @@ def main():
             statistics += name + ',' + str(len(seq)) + '\n'
             phy += name + ' ' + seq + '\n'
             nex += '['+str(count) +'] ' + name + ' ' + seq + '\n'
-            paml += name + '\n' + sort_seq(seq) + '\n'
+            paml += name + '\n' + align(seq) + '\n'
             axt_name += name.replace('_',' ') + '-'
             axt_seq += seq + '\n'
             count += 1
@@ -95,8 +95,7 @@ def main():
         paml = str(count - 1)+'  '+str(len(seq))+'\n\n' + paml
         axt = axt_name.strip('-') + '\n' + axt_seq
     save(phy,nex,paml,axt,statistics,myargs.file,myargs)
- 
-    
+     
 if __name__ == '__main__':
     import re,argparse,sys,os
     main()
