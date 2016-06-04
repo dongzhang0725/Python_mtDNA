@@ -67,7 +67,7 @@ def replace(dict_replace,old_name):
     except KeyError:
         pass
     return old_name
-def judge(new_name,values,gb_num):
+def judge(new_name,values,gb_num,file):
     if new_name == 'L' or new_name == 'S':
         if re.search(r'(?<=[^1-9a-z_])(Leu1|CUA|CUN|tag|L1|trnL1)(?=[^1-9a-z_])',values,re.I): 
             new_name = 'L1'
@@ -79,11 +79,11 @@ def judge(new_name,values,gb_num):
             new_name = 'S1'
         else:
             position = '【'+'\t'.join(values.split('\n')[0].split())+'】'
-            print('Ambiguous annotation about S1, S2, L1 and L2 in %s for %s\n'%(position,gb_num))
+            print('Ambiguous annotation about S1, S2, L1 and L2 in %s for %s within %s\n'%(position,gb_num,file))
     else:
         new_name = new_name
     return new_name        
-def get_item(individual_gb,f,line,gb_num,myargs): 
+def get_item(individual_gb,f,line,gb_num,myargs,file): 
     item = []
     dict_replace = substitute()
     generator_item = next_item(f,line)  
@@ -99,12 +99,12 @@ def get_item(individual_gb,f,line,gb_num,myargs):
                     item.append(feature)
                     feature,feature_content,line = next(generator_item) 
                     if feature[0] == 'tRNA':
-                        new_name = judge(new_name,feature_content,gb_num)
+                        new_name = judge(new_name,feature_content,gb_num,file)
                     individual_gb += previous_content.replace(old_name,new_name) 
                     if feature[1] == previous_feature[1]:
                         individual_gb += feature_content
                     else:
-                        print('Error：%s\t%s are not same as previous gene annotation within %s!'%(feature[0],feature[1],gb_num))
+                        print('Error：%s\t%s are not same as previous gene annotation within %s for %s!'%(feature[0],feature[1],gb_num,file))
                 except KeyError: 
                     previous_feature = feature
                     previous_content = feature_content
@@ -115,25 +115,25 @@ def get_item(individual_gb,f,line,gb_num,myargs):
                             old_name = feature[2]['gene'] 
                             new_name = replace(dict_replace,old_name)
                             if feature[0] == 'tRNA':
-                                new_name = judge(new_name,feature_content,gb_num)
+                                new_name = judge(new_name,feature_content,gb_num,file)
                             previous_content += 21*' '+'/gene="%s"\n'%new_name
                             individual_gb += previous_content
                         except KeyError:
                             old_name = feature[2]['product'] 
                             new_name = replace(dict_replace,old_name)
                             if feature[0] == 'tRNA':
-                                new_name = judge(new_name,feature_content,gb_num)
+                                new_name = judge(new_name,feature_content,gb_num,file)
                             previous_content += 21*' '+'/gene="%s"\n'%new_name
                             individual_gb += previous_content
                         individual_gb += feature_content 
                     else:
-                        print('Error：%s\t%s are not same as previous gene annotation within %s!'%(feature[0],feature[1],gb_num))
+                        print('Error：%s\t%s are not same as previous gene annotation within %s for %s!'%(feature[0],feature[1],gb_num,file))
             else: 
                 try: 
                     old_name = feature[2]['gene'] 
                     new_name = replace(dict_replace,old_name)
                     if feature[0] == 'tRNA':
-                        new_name = judge(new_name,feature_content,gb_num)
+                        new_name = judge(new_name,feature_content,gb_num,file)
                     previous_content = 5*' ' + 'gene' + 12*' ' + feature[1] + '\n' + 21*' ' + '/gene="%s"\n'%new_name
                     individual_gb += previous_content + feature_content
                 except KeyError:
@@ -141,13 +141,13 @@ def get_item(individual_gb,f,line,gb_num,myargs):
                         old_name = feature[2]['product'] 
                         new_name = replace(dict_replace,old_name)
                         if feature[0] == 'tRNA':
-                            new_name = judge(new_name,feature_content,gb_num)
+                            new_name = judge(new_name,feature_content,gb_num,file)
                         previous_content = 5*' ' + 'gene' + 12*' ' + feature[1] + '\n' + 21*' ' + '/gene="%s"\n'%new_name
                         individual_gb += previous_content + feature_content  
                     except KeyError:
                         previous_content = 5*' ' + 'gene' + 12*' ' + feature[1] + '\n' + 21*' ' + '/gene=NCR\n'
                         individual_gb += previous_content + feature_content
-                        print('Warning： when handle %s in %s'%(feature,gb_num))          
+                        print('Warning： when handle %s in %s for %s'%(feature,gb_num,file))          
             item.append(feature)     
             last_feature = feature 
             feature,feature_content,line = next(generator_item)
@@ -196,7 +196,7 @@ def main(myargs):
                     individual_gb,line,value = source(individual_gb,line,f) 
                     latin = latin + value.replace(' ','_')                
                     if latin not in list_latin:
-                        item,individual_gb,line = get_item(individual_gb,f,line,gb_num,myargs)
+                        item,individual_gb,line = get_item(individual_gb,f,line,gb_num,myargs,file)
                         individual_gb,line = get_sequence(individual_gb,f,line)
                         def save():                    
                             with open(myargs.out+'/'+latin+'.gb','w') as f1:
