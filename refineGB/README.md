@@ -1,6 +1,6 @@
 #refineGB.py
 
-`usage:` refineGB.py [-h] -f FILE [-n NUM] -o OUT
+`usage:`      `refineGB.py [-h] -f FILE [-n NUM] -o OUT`
 
 `Description:`Refine GenBank file to standard format.
 
