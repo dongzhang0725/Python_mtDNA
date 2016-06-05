@@ -1,8 +1,11 @@
+#alter_name.py
+
 `usage:` `alter_name.py [-h] -f FILE [-o OUT]`
 
 `Description:`Simplify default name of fasta file from NCBI
 
 optional arguments:
+
                   -h, --help  show this help message and exit
                   
                   -f FILE     input fasta file
