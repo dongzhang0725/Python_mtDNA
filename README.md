@@ -12,7 +12,7 @@
                         		
             3.python C:\Users\Administrator\Desktop\scripts\backtrans.py -AAin test.aln -NUCin test.nuc -s clustal -c 2 -nogap -blockonly   【for file】
 
-#converfmt.py
+#convertfmt.py
 
 `Description:`Convert fasta to selected format `【phylip|nexus|paml|axt】`
 
