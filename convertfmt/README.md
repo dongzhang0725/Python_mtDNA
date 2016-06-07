@@ -16,7 +16,7 @@ optional arguments:
               
               -axt:     convert into axt format
               
-              -stat:    convert statistics of the fasta file
+              -stat:    generate statistics of the fasta file
 
 `【python 3.4.3】`
 
