@@ -1,6 +1,6 @@
 #convertfmt.py
 
-`Description:`Convert fasta to selected format `【phylip|nexus|paml|axt】`
+`Description:`Convert fasta file to selected format `【phylip|nexus|paml|axt】`
 
 optional arguments:
 
@@ -8,15 +8,15 @@ optional arguments:
               
               -f:       input fasta file
               
-              -phy:     turn into phylip format
+              -phy:     convert into phylip format
               
-              -nex:     turn into nexus format
+              -nex:     convert into nexus format
               
-              -paml:    turn into paml format
+              -paml:    convert into paml format
               
-              -axt:     turn into axt format
+              -axt:     convert into axt format
               
-              -stat:    generate statistics of the fasta file
+              -stat:    convert statistics of the fasta file
 
 `【python 3.4.3】`
 
