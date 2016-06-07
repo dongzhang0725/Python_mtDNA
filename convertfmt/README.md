@@ -1,4 +1,4 @@
-#converfmt.py
+#convertfmt.py
 
 `Description:`Convert fasta to selected format `【phylip|nexus|paml|axt】`
 
