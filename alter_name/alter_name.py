@@ -13,9 +13,11 @@ def main():
                 description = 'Simplify default name of fasta file from NCBI',\
                 epilog = r'''
 examples:
-    python C:\Users\Desktop\scripts\alter_name.py -f C:\Users\Desktop\demo.fasta -o C:\Users\Desktop\demo-out.fasta
+    1.python C:\Users\Desktop\scripts\alter_name.py -f C:\Users\Desktop\demo.fasta -o C:\Users\Desktop\demo-out.fasta
+    2.python C:\Users\Desktop\scripts\alter_name.py -f C:\Users\Desktop\demo.fasta -o C:\Users\Desktop\demo-out.fasta -gb
                 ''')
         parser.add_argument('-f',dest ='file',help='input fasta file',required=True)
+        parser.add_argument('-gb',dest ='gb_num',help='whether retain gb number or not',default=False,action='store_true')
         parser.add_argument('-o',dest='out',help='out file name',default = sys.stdout,type=argparse.FileType('w'))
         myargs = parser.parse_args(sys.argv[1:])
         return myargs
@@ -25,13 +27,21 @@ examples:
             f.seek(0,0)
             line = f.readline()
             dict_name = {}
+            line_num = 1
             while line != '':
                 while not line.startswith('>'):
                     line = f.readline()
-                dict_name[line] = '>'+re.search(r'(?<=\| ).+?(?= (16S|mitochondrion|cytochrome|18S|internal transcribed spacer))',line,re.I).group().replace(' ','_')+'\n'  
+                    line_num += 1
+                try: 
+                    dict_name[line] = '>'+re.search(r'(?<=\| ).+?(?= (16S|mitochondrion|cytochrome|18S|internal transcribed spacer))',\
+                                    line,re.I).group().replace(' ','_')+('_'+re.search(r'(?<=gb\|)([A-Z]{2}\d{6})(?=\.\d)', line, re.I).group() if myargs.gb_num else '')+'\n' 
+                except AttributeError:
+                    print('warning:nothing changed in line %d 【%s】'%(line_num,line.strip()))
                 line = f.readline()
+                line_num += 1
                 while not line.startswith('>') and line != '':        
                     line = f.readline()
+                    line_num += 1
         for key,value in dict_name.items():
             content = content.replace(key,value)
         myargs.out.write(content)
