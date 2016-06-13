@@ -1,5 +1,5 @@
 #gb_parser.py
-`【python 3.4.3】` biopython must be installed
+`【python 3.4.3】`  `biopython must be enabled`
 
 `usage:` 
 
