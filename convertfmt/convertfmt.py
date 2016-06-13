@@ -4,100 +4,109 @@
 __date__  =  '2016年5月18日'
 __author__  =  'zhang dong;708986950@qq.com'
 
-def judge(seq):
-    DNA = re.search(r'[ATCG]{10}',seq,re.I)  
-    PROTEIN = re.search(r'[GAVLIFWYDHNEKQMRSTCP]{10}',seq,re.I)
-    if DNA:
-        pattern = 'DNA'
-    elif PROTEIN:
-        pattern = 'PROTEIN'
-    else:
-        print('ERROR!neither nucleotide nor protein sequences!')
-    return pattern    
-def align(seq):  
-    list_seq = re.findall(r'(.{60})',seq)   
-    remainder = len(seq)%60  
-    if remainder == 0:
-        align_seq = '\n'.join(list_seq) + '\n'
-    else:
-        align_seq = '\n'.join(list_seq) +'\n' + seq[-remainder:] + '\n'
-    return align_seq
-def save(phy,nex,paml,axt,statistics,inputfile,myargs):
-    file_path=os.path.dirname(inputfile) if os.path.dirname(inputfile) else '.'
-    if myargs.phy:
-        with open(file_path+'/'+os.path.basename(inputfile).split('.')[0]+'.phy','w') as f1:
-            f1.write(phy)
-    if myargs.nex:
-        with open(file_path+'/'+os.path.basename(inputfile).split('.')[0]+'.nex','w') as f2:
-            f2.write(nex)
-    if myargs.paml:
-        with open(file_path+'/'+os.path.basename(inputfile).split('.')[0]+'.PML','w') as f3:
-            f3.write(paml)
-    if myargs.axt:
-        with open(file_path+'/'+os.path.basename(inputfile).split('.')[0]+'.axt','w') as f4:
-            f4.write(axt)
-    if myargs.stat:
-        with open(os.path.dirname(inputfile)+'./statistics.csv','w') as f5:
-            f5.write(statistics)  
-def parameter():
-    parser = argparse.ArgumentParser(\
-            formatter_class=argparse.RawTextHelpFormatter,\
-            prog = 'convertfmt.py',\
-            description = 'Convert fasta to selected format 【phylip|nexus|paml|axt】',\
-            epilog = r'''
-examples:
-        1.python C:\Users\Administrator\Desktop\scripts\convertfmt.py -f C:\Users\Administrator\Desktop\scripts\demo.fasta -phy
-        2.python C:\Users\Administrator\Desktop\scripts\convertfmt.py -f demo.fasta -phy -nex -paml -axt -stat 
-            ''')
-    parser.add_argument('-f',dest ='file',help='input fasta file',required=True)
-    parser.add_argument('-phy',dest ='phy',help='turn into phylip format',\
-                        default=False,action='store_true')   
-    parser.add_argument('-nex',dest ='nex',help='turn into nexus format',\
-                        default=False,action='store_true')
-    parser.add_argument('-paml',dest ='paml',help='turn into paml format',\
-                        default=False,action='store_true') 
-    parser.add_argument('-axt',dest ='axt',help='turn into axt format',\
-                        default=False,action='store_true') 
-    parser.add_argument('-stat',dest ='stat',help='generate statistics of the fasta file',\
-                        default=False,action='store_true')
-    myargs = parser.parse_args(sys.argv[1:])
-    return myargs
-def main():
-    myargs = parameter()
-    with open(myargs.file) as f:
-        line = f.readline()
-        phy = ''
-        nex = ''
-        paml = ''
-        axt_name = ''
-        axt_seq = ''
-        statistics = 'Name,Lenth\n'
-        count = 1
-        while line != '':
-            while not line.startswith('>'):  
-                line = f.readline()
-            name = line.strip('>').strip('\n').replace(' ','_') 
-            seq = ''
-            line = f.readline()  
-            while not line.startswith('>') and line != '':
-                seq += line.strip().replace(' ','')                    
-                line = f.readline()
-            statistics += name + ',' + str(len(seq)) + '\n'
-            phy += name + ' ' + seq + '\n'
-            nex += '['+str(count) +'] ' + name + ' ' + seq + '\n'
-            paml += name + '\n' + align(seq) + '\n'
-            axt_name += name.replace('_',' ') + '-'
-            axt_seq += seq + '\n'
-            count += 1
-        pattern = judge(seq)
-        phy = ' '+str(count - 1)+' '+str(len(seq))+'\n' + phy  
-        nex = '#NEXUS\nBEGIN DATA;\ndimensions ntax=%s nchar=%s;\nformat missing=?\ndatatype=%s gap= -;\n\nmatrix\n'\
-              %(str(count - 1),str(len(seq)),pattern) + nex + ';\nEND;\n'
-        paml = str(count - 1)+'  '+str(len(seq))+'\n\n' + paml
-        axt = axt_name.strip('-') + '\n' + axt_seq
-    save(phy,nex,paml,axt,statistics,myargs.file,myargs)
-     
+class Handle_file:
+    def __init__(self,file):
+        self.file = file        
+        self.phy = ''
+        self.nex = ''
+        self.paml = ''
+        self.axt_name = ''
+        self.axt_seq = ''
+        self.statistics = 'Name,Lenth\n'
+        self.count = 1   
+    def align(self):  
+        list_seq = re.findall(r'(.{60})',self.seq)   
+        remainder = len(self.seq)%60  
+        if remainder == 0:
+            self.align_seq = '\n'.join(list_seq) + '\n'
+        else:
+            self.align_seq = '\n'.join(list_seq) +'\n' + self.seq[-remainder:] + '\n'
+    def assign(self):
+        self.align()
+        self.statistics += self.name + ',' + str(len(self.seq)) + '\n'
+        self.phy += self.name + ' ' + self.seq + '\n'
+        self.nex += '['+str(self.count) +'] ' + self.name + ' ' + self.seq + '\n'
+        self.paml += self.name + '\n' + self.align_seq + '\n'
+        self.axt_name += self.name.replace('_',' ') + '-'
+        self.axt_seq += self.seq + '\n'
+        self.count += 1
+    def judge(self):
+        DNA = re.search(r'[ATCG]{10}',self.seq,re.I)  
+        PROTEIN = re.search(r'[GAVLIFWYDHNEKQMRSTCP]{10}',self.seq,re.I)
+        if DNA:
+            self.pattern = 'DNA'
+        elif PROTEIN:
+            self.pattern = 'PROTEIN'
+        else:
+            print('ERROR!neither nucleotide nor protein sequences!')
+    def complete(self):
+        self.phy = ' '+str(self.count - 1)+' '+str(len(self.seq))+'\n' + self.phy  
+        self.nex = '#NEXUS\nBEGIN DATA;\ndimensions ntax=%s nchar=%s;\nformat missing=?\ndatatype=%s gap= -;\n\nmatrix\n'\
+              %(str(self.count - 1),str(len(self.seq)),self.pattern) + self.nex + ';\nEND;\n'
+        self.paml = str(self.count - 1)+'  '+str(len(self.seq))+'\n\n' + self.paml
+        self.axt = self.axt_name.strip('-') + '\n' + self.axt_seq
+    def handle(self):
+        with open(self.file) as self.f:
+            self.line = self.f.readline()
+            while self.line != '':
+                while not self.line.startswith('>'):  
+                    self.line = self.f.readline()
+                self.name = self.line.strip('>').strip('\n').replace(' ','_')
+                self.name = re.sub(r'\||[(]|[)]|"','',self.name) 
+                self.seq = ''
+                self.line = self.f.readline()  
+                while not self.line.startswith('>') and self.line != '':
+                    self.seq += self.line.strip().replace(' ','')                    
+                    self.line = self.f.readline()
+                self.assign()    
+    def save(self,inputfile):
+        file_path=os.path.dirname(inputfile) if os.path.dirname(inputfile) else '.'
+        if myargs.phy:
+            with open(file_path+'/'+os.path.basename(inputfile).split('.')[0]+'.phy','w') as f1:
+                f1.write(self.phy)
+        if myargs.nex:
+            with open(file_path+'/'+os.path.basename(inputfile).split('.')[0]+'.nex','w') as f2:
+                f2.write(self.nex)
+        if myargs.paml:
+            with open(file_path+'/'+os.path.basename(inputfile).split('.')[0]+'.PML','w') as f3:
+                f3.write(self.paml)
+        if myargs.axt:
+            with open(file_path+'/'+os.path.basename(inputfile).split('.')[0]+'.axt','w') as f4:
+                f4.write(self.axt)
+        if myargs.stat:
+            with open(os.path.dirname(inputfile)+'./statistics.csv','w') as f5:
+                f5.write(self.statistics)       
 if __name__ == '__main__':
     import re,argparse,sys,os
+    def parameter():
+        parser = argparse.ArgumentParser(\
+                formatter_class=argparse.RawTextHelpFormatter,\
+                prog = 'convertfmt.py',\
+                description = 'Convert fasta to selected format 【phylip|nexus|paml|axt】',\
+                epilog = r'''
+    examples:
+            1.python C:\Users\Administrator\Desktop\scripts\convertfmt.py -f C:\Users\Administrator\Desktop\scripts\demo.fasta -phy
+            2.python C:\Users\Administrator\Desktop\scripts\convertfmt.py -f demo.fasta -phy -nex -paml -axt -stat 
+                ''')
+        parser.add_argument('-f',dest ='file',help='input fasta file',required=True)
+        parser.add_argument('-phy',dest ='phy',help='turn into phylip format',\
+                            default=False,action='store_true')   
+        parser.add_argument('-nex',dest ='nex',help='turn into nexus format',\
+                            default=False,action='store_true')
+        parser.add_argument('-paml',dest ='paml',help='turn into paml format',\
+                            default=False,action='store_true') 
+        parser.add_argument('-axt',dest ='axt',help='turn into axt format',\
+                            default=False,action='store_true') 
+        parser.add_argument('-stat',dest ='stat',help='generate statistics of the fasta file',\
+                            default=False,action='store_true')
+        myargs = parser.parse_args(sys.argv[1:])
+        return myargs
+    myargs = parameter()
+    def main():
+        myHandle = Handle_file(myargs.file)
+        myHandle.handle() 
+        myHandle.judge()  
+        myHandle.complete() 
+        myHandle.save(myargs.file) 
     main()
     print('completed!')
