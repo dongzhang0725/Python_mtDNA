@@ -1,4 +1,5 @@
 #gb_parser.py
+`【python 3.4.3】` biopython must be installed
 
 `usage:` 
 
@@ -67,7 +68,6 @@
                     
                     -csv                  generate csv files about the nucleotide sequence of PCGs, rRNAs and tRNAs
 
-`【python 3.4.3】`
 
 `Usage example:`
 
