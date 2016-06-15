@@ -606,7 +606,7 @@ Specify GenBank file and replace file:
         parser.add_argument('-n',dest ='num',help='the amount of the protein plus rRNA genes among mtDNA',\
                             choices=[14,15],default=14,type=int) 
         parser.add_argument('-r',dest='replace',help='the replace file with unified gene names involved in',type=argparse.FileType('r'),default=scripts_path+'/replace.txt')
-        parser.add_argument('-t',dest='type',help='''**** choose a type ****
+        parser.add_argument('-t',dest='type',help='''**** choose a type of the header of the fasta file ****
                             【1】by latin,   for instance:>Benedenia_hoshinai (default)                            
                             【2】by Genbank, for instance:>NC_014591                            
                             【3】by logogram,for instance:>B_hoshinai                            
