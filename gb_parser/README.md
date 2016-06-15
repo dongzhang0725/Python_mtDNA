@@ -15,7 +15,7 @@
                     
                     -r REPLACE            the replace file with unified gene names involved in
                     
-                    -t {1,2,3,4}          **** choose a type **** 
+                    -t {1,2,3,4}          **** choose a type of the header of the fasta file **** 
                                          【1】by latin,     for instance:>Benedenia_hoshinai (default) 
                                          【2】by Genbank,   for instance:>NC_014591 
                                          【3】by logogram,  for instance:>B_hoshinai 
