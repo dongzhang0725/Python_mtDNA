@@ -239,8 +239,8 @@ class Extract_inf():
             except ValueError:  
                 print('%s is a superfluous gene in %s\n'%(new_name,self.latin)) 
                 self.exception += '%s is a superfluous gene in %s\n'%(new_name,self.latin)       
-                self.error_species += '【%s】\t'%(self.each[1] + '_' + self.each[0][0])
-                self.error_gb += self.each[0][0] + ' '
+                self.error_species += '【%s】\t'%(self.latin + '_' + self.gb_num)
+                self.error_gb += self.gb_num + ' '
             self.dict_pro[new_name + '>' + self.latin] = '>' + self.decision +'\n'+ self.find_pos() + '\n'
             self.pro_seq +=  self.decision +'\t'+ new_name + '\t' + self.find_pos() + '\n'
             self.gene_order += new_name + ' '
@@ -271,8 +271,8 @@ class Extract_inf():
         except ValueError: 
             print('%s is a superfluous gene in %s\n'%(new_name,self.latin)) 
             self.exception += '%s is a superfluous gene in %s\n'%(new_name,self.latin)       
-            self.error_species += '【%s】\t'%(self.each[1] + '_' + self.each[0][0])
-            self.error_gb += self.each[0][0] + ' '
+            self.error_species += '【%s】\t'%(self.latin + '_' + self.gb_num)
+            self.error_gb += self.gb_num + ' '
         self.dict_rRNA[new_name + '>' + self.latin] = '>' + self.decision +'\n'+ self.find_pos() + '\n'
         self.rRNA_seq += self.decision +'\t'+ new_name + '\t' + self.find_pos() + '\n'
         self.gene_order += new_name + ' '
@@ -333,11 +333,11 @@ class Extract_inf():
             assert len(self.list_pro) == 0
         except AssertionError:
             self.exception += '%s have been absent in %s\n'%(self.list_pro,self.latin)
-            self.error_species += '【%s】\t'%(self.each[1] + '_' + self.each[0][0])
-            self.error_gb += self.each[0][0] + ' '
+            self.error_species += '【%s】\t'%(self.latin + '_' + self.gb_num)
+            self.error_gb += self.gb_num + ' '
     def output_from_file(self):
         self.variable()
-        for self.each in self.species_generator():
+        for i in self.species_generator():
             self.list_pro = self.list_PCGs[:]
             if (not self.gb_num in myargs.exclude) and (not self.seq in self.list_sequence):  
                 self.variable1()
