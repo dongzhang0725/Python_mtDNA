@@ -118,11 +118,11 @@ class Extract_inf():
             seq = seq[::-1].upper() 
             gene_seq = ''
             dict1 = {"A":"T","T":"A","C":"G","G":"C"}
-            for self.i in seq:
-                if self.i in 'ATGC':
-                    gene_seq += dict1[self.i]     
+            for i in seq:
+                if i in 'ATGC':
+                    gene_seq += dict1[i]     
                 else:
-                    gene_seq += self.i  
+                    gene_seq += i  
             return gene_seq
         else:
             if 'join' in self.i[1]:
