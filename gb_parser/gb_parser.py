@@ -551,7 +551,6 @@ class Save_files(Handle_GB,Extract_inf):
                          prefix_ter+'\n'.join(list_stop))
     def specie_select(self):
         if myargs.prefer != []:
-            print(myargs.prefer)
             for j in myargs.prefer:
                 with open('./files/'+j+'.csv','w') as f3:
                     f3.write(self.dict_spe_stat[j])
