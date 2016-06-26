@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-__file__    = 'gb_parser.py'
+
+__file__    = 'gb2fas.py'
 __date__    = '2016-3-8'
 __author__  = 'zhang dong;708986950@qq.com;@P&Clab @CAS @CHINA'
-__version__ = 'python3.4.3'
 
 class Handle_GB:
     def get_ids(self):
@@ -38,13 +38,15 @@ class Handle_GB:
     
     def is_feature_start(self):   
         return self.line and self.line[5] != ' '
+    
     def next_item(self):  
         self.line = self.skip_to_feature()  
         self.line = self.src.readline()   
         while not self.line.startswith('ORIGIN'):  
             assert self.is_feature_start()   
             feature = self.read_feature()         
-            yield feature    
+            yield feature
+            
     def is_attribute_start(self):
         attribute_prefix = 21*' ' + '/' 
         return self.line and self.line.startswith(attribute_prefix)
@@ -61,13 +63,15 @@ class Handle_GB:
             props[key] = fullvalue
         feature.append(props)
         return feature
+    
     def get_value(self,value):
         self.line = self.src.readline() 
         while (not self.is_attribute_start() and not self.is_feature_start()): 
             value += self.line.strip()  
             self.line = self.src.readline()  
         fullvalue = value.strip('"') 
-        return fullvalue,self.line    
+        return fullvalue,self.line
+    
     def get_item(self):
         self.item = []
         for self.each in self.next_item():
@@ -88,9 +92,9 @@ class Handle_GB:
         self.line = self.src.readline()
         while not self.line == '':
             self.get_ids() 
-            self.get_latin() 
+            self.get_latin()
             self.get_item() 
-            self.get_sequence() 
+            self.get_sequence()
             while not self.line.startswith('LOCUS') and self.line != '':  
                 self.line = self.src.readline()  
             yield
@@ -148,17 +152,17 @@ class Extract_inf():
         return old_name              
     def judge(self,name,values):
         if name == 'tRNA-Leu' or name == 'tRNA-Ser':
-            if re.search(r'(?<=[^1-9a-z_])(Leu1|CUA|CUN|tag|L1|trnL1)(?=[^1-9a-z_])',values,re.I): 
+            if re.search(r'(?<=[^1-9a-z_])(CUA|CUN|tag|L1|trnL1|Leu1)(?=[^1-9a-z_])',values,re.I): 
                 name = 'tRNA-Leu1'
-            elif re.search(r'(?<=[^1-9a-z_])(Leu2|UUA|UUR|taa|L2|trnL2)(?=[^1-9a-z_])',values,re.I):
+            elif re.search(r'(?<=[^1-9a-z_])(UUA|UUR|taa|L2|trnL2|Leu2)(?=[^1-9a-z_])',values,re.I):
                 name = 'tRNA-Leu2'
-            elif re.search(r'(?<=[^1-9a-z_])(Ser2|UCA|UCN|tga|S2|trnS2)(?=[^1-9a-z_])',values,re.I):
+            elif re.search(r'(?<=[^1-9a-z_])(UCA|UCN|tga|S2|trnS2|Ser2)(?=[^1-9a-z_])',values,re.I):
                 name = 'tRNA-Ser2'
-            elif re.search(r'(?<=[^1-9a-z_])(Ser1|AGC|AGN|AGY|gct|tct|S1|trnS1)(?=[^1-9a-z_])',values,re.I):
+            elif re.search(r'(?<=[^1-9a-z_])(AGC|AGN|AGY|gct|tct|S1|trnS1|Ser1)(?=[^1-9a-z_])',values,re.I):
                 name = 'tRNA-Ser1'
             else:
                 position = '【'+self.i[0] + '\t' + self.i[1] + '】'
-                self.exception += 'Ambiguous annotation about S1, S2, L1 and L2 in %s for %s\n'%(position,self.gb_num)
+                self.exception += 'Ambiguous annotation about S1, S2, L1 and L2 in %s for %s\n'%(position,self.latin_gb)
         else:
             name = name
         return name
@@ -182,24 +186,24 @@ class Extract_inf():
         self.dict_start = {}    
         self.dict_stop = {}
         self.dict_PCG = {}  
-        self.dict_RNA = {}  
+        self.dict_RNA = {} 
         self.dict_geom = {} 
         self.dict_spe_stat = {} 
         self.list_abbre = []
-        self.list_sequence = []
-        self.substitute()  
-        self.linear_order = ''  
+        self.list_sequence = [] 
+        self.substitute() 
+        self.linear_order = '' 
         self.complete_seq = ''
-        self.exception = '' 
-        self.error_species = ''  
+        self.exception = ''
+        self.error_species = '' 
         self.error_gb = ''
         self.list_PCGs = self.gene_num() 
     def variable1(self):
         self.list_sequence.append(self.seq)
         self.PCGs = '' 
-        self.tRNAs = '' 
-        self.dict_genes = {}  
-        self.breviary = self.latin.split('_')[0][0] + '_' + '_'.join(self.latin.split('_')[1:])  
+        self.tRNAs = ''
+        self.dict_genes = {} 
+        self.breviary = self.latin.split('_')[0][0] + '_' + '_'.join(self.latin.split('_')[1:]) 
         self.latin_gb = self.latin + '_' + self.gb_num
         self.tree_name = self.latin.replace('_',' ') + ' (' + self.gb_num + ')'
         self.abbreviation = self.latin.split('_')[0][0]+'_'+self.latin.split('_')[1][0]
@@ -230,18 +234,18 @@ class Extract_inf():
         try:       
             try:
                 old_name = self.i[2]['gene'].upper()
-            except:
+            except KeyError:
                 self.exception += 'ERROR:no "/gene" annotation in 【%s】 for %s, "/product" has been invoked\n'%(self.i[1],self.latin+'_'+self.gb_num)
                 old_name = self.i[2]['product']           
             new_name = self.replace(old_name)  
-            try:     
+            try:    
                 self.list_pro.remove(new_name)
-            except ValueError:  
+            except ValueError: 
                 print('%s is a superfluous gene in %s\n'%(new_name,self.latin)) 
                 self.exception += '%s is a superfluous gene in %s\n'%(new_name,self.latin)       
-                self.error_species += '【%s】\t'%(self.latin + '_' + self.gb_num)
+                self.error_species += '【%s】\t'%(self.latin_gb)
                 self.error_gb += self.gb_num + ' '
-            self.dict_pro[new_name + '>' + self.latin] = '>' + self.decision +'\n'+ self.find_pos() + '\n'
+            self.dict_pro[new_name + '>' + self.latin+'_'+self.gb_num] = '>' + self.decision +'\n'+ self.find_pos() + '\n' #这里不能用seq代替，因为要用大小写区分正负链
             self.pro_seq +=  self.decision +'\t'+ new_name + '\t' + self.find_pos() + '\n'
             self.gene_order += new_name + ' '
             try:
@@ -268,15 +272,15 @@ class Extract_inf():
         new_name = self.replace(old_name)
         try:     
             self.list_pro.remove(new_name)
-        except ValueError: 
+        except ValueError:  
             print('%s is a superfluous gene in %s\n'%(new_name,self.latin)) 
             self.exception += '%s is a superfluous gene in %s\n'%(new_name,self.latin)       
-            self.error_species += '【%s】\t'%(self.latin + '_' + self.gb_num)
+            self.error_species += '【%s】\t'%(self.latin_gb)
             self.error_gb += self.gb_num + ' '
-        self.dict_rRNA[new_name + '>' + self.latin] = '>' + self.decision +'\n'+ self.find_pos() + '\n'
+        self.dict_rRNA[new_name + '>' + self.latin+'_'+self.gb_num] = '>' + self.decision +'\n'+ self.find_pos() + '\n'
         self.rRNA_seq += self.decision +'\t'+ new_name + '\t' + self.find_pos() + '\n'
         self.gene_order += new_name + ' '
-        try:
+        try: 
             self.dict_RNA[new_name]+=','+str(len(self.find_pos()))
         except KeyError:
             self.dict_RNA[new_name]=new_name+','+str(len(self.find_pos())) 
@@ -291,9 +295,9 @@ class Extract_inf():
             name = self.i[2]['product']
         except:
             name = self.i[2]['gene'].replace(' ','-')
-        values = ':'+':'.join(list(self.i[2].values()))+':' 
+        values = ':'+':'.join(list(self.i[2].values()))+':'
         name = self.judge(name,values)  
-        self.dict_tRNA[name + '>' + self.latin] = '>' + self.decision +'\n'+ self.find_pos() + '\n'
+        self.dict_tRNA[name + '>' + self.latin+'_'+self.gb_num] = '>' + self.decision +'\n'+ self.find_pos() + '\n'
         self.tRNA_seq += self.decision +'\t'+ name + '\t' + self.find_pos() + '\n'
         self.tRNA_fas += '>' + self.decision +'_'+ name + '\n' + self.find_pos() + '\n'
         self.gene_order += name + ' '
@@ -329,22 +333,22 @@ class Extract_inf():
               tRNA_stat+self.NCR+geom_stat
         self.dict_spe_stat[self.gb_num] = stat 
     def assert_gene_num(self):
-        try:      
+        try:     
             assert len(self.list_pro) == 0
         except AssertionError:
-            self.exception += '%s have been absent in %s\n'%(self.list_pro,self.latin)
-            self.error_species += '【%s】\t'%(self.latin + '_' + self.gb_num)
+            self.exception += '%s have been absent in %s\n'%(self.list_pro,self.latin_gb)
+            self.error_species += '【%s】\t'%(self.latin_gb)
             self.error_gb += self.gb_num + ' '
     def output_from_file(self):
         self.variable()
         for i in self.species_generator():
             self.list_pro = self.list_PCGs[:]
-            if (not self.gb_num in myargs.exclude) and (not self.seq in self.list_sequence):  
-                self.variable1()
+            if (not self.gb_num in myargs.exclude) and (not self.seq in self.list_sequence): 
+                self.variable1()               
                 for self.i in self.item:
                     if self.i[0] in 'source SOURCE':
                         self.source()
-                    if self.i[0] == 'CDS': 
+                    if self.i[0] == 'CDS':
                         self.CDS()                        
                     if self.i[0] == 'rRNA':
                         self.rRNA_()
@@ -352,7 +356,7 @@ class Extract_inf():
                         self.tRNA_()                        
                     if self.i[0] == 'repeat_region' or self.i[0] == 'misc_feature':
                         self.NCR_()                       
-                self.specie_stat()                                         
+                self.specie_stat()                                          
                 self.linear_order += self.gene_order + '\n'
                 self.assert_gene_num()
 class Save_files(Handle_GB,Extract_inf):
@@ -370,7 +374,7 @@ class Save_files(Handle_GB,Extract_inf):
         return trim_sequence 
     def nuc(self,seq_pro,gene):
         if myargs.NUC:
-            try:                
+            try:                 
                 os.mkdir('./NUC')
             except FileExistsError:
                 pass          
@@ -378,7 +382,7 @@ class Save_files(Handle_GB,Extract_inf):
                 f.write(seq_pro)
     def aa(self,trans_pro,gene):
         if myargs.AA:
-            try:                 
+            try:            
                 os.mkdir('./AA')
             except FileExistsError:
                 pass          
@@ -394,7 +398,7 @@ class Save_files(Handle_GB,Extract_inf):
                 f.write(seq_rRNA)
     def tRNA(self,seq_tRNA,gene):
         if myargs.tRNA:
-            try:                 
+            try:             
                 os.mkdir('./tRNA')
             except FileExistsError:
                 pass         
@@ -406,7 +410,7 @@ class Save_files(Handle_GB,Extract_inf):
         seq_pro = ''
         trans_pro = ''
         it = iter(list_pro)
-        table = CodonTable.ambiguous_dna_by_id[int(self.table_num)] 
+        table = CodonTable.ambiguous_dna_by_id[int(self.table_num)]
         statistics = ''
         while True:
             try:
@@ -415,13 +419,13 @@ class Save_files(Handle_GB,Extract_inf):
                 if gene == previous or previous == '':        
                     seq_pro += self.dict_pro[i]
                     raw_sequence = self.dict_pro[i].split('\n')[1]   
-                    trim_sequence = self.trim_ter(raw_sequence)  
-                    protein = _translate_str(trim_sequence, table)  
+                    trim_sequence = self.trim_ter(raw_sequence) 
+                    protein = _translate_str(trim_sequence, table) 
                     trans_pro += self.dict_pro[i].replace(raw_sequence,protein)
                     previous = gene            
                 if gene != previous:   
                     self.nuc(seq_pro,previous)
-                    self.aa(trans_pro,previous)  
+                    self.aa(trans_pro,previous) 
                     statistics += previous+','+str(seq_pro.count('>'))+'\n'
                     seq_pro = ''
                     trans_pro = ''
@@ -506,7 +510,7 @@ class Save_files(Handle_GB,Extract_inf):
                 f.write(self.statistics) 
         with open('./files/error_report.txt','w') as f1:
             f1.write(self.exception)
-    def save_seq(self):
+    def save_seq(self): 
         if myargs.geom:
             with open('./files/complete_seq.fas','w') as f:
                 f.write(self.complete_seq)
@@ -527,14 +531,14 @@ class Save_files(Handle_GB,Extract_inf):
                 f4.write(self.tRNA_fas)
     def save_stat(self):
         if myargs.table:
-            list_geom = [value for (key,value) in sorted(self.dict_geom.items())]
+            list_geom = [value for (key,value) in sorted(self.dict_geom.items())] 
             list_start = [value for (key,value) in sorted(self.dict_start.items())]
             list_stop = [value for (key,value) in sorted(self.dict_stop.items())]
             list_PCGs = [value for (key,value) in sorted(self.dict_PCG.items())]
             list_RNA = [value for (key,value) in sorted(self.dict_RNA.items())]
             with open('./files/genome_tbl.csv','w') as f1:
                 prefix = 'Species,Abbreviations,GeneBank accesion no.,Full length (bp),A+T content (%)\n'
-                f1.write(prefix+'\n'.join(list_geom))
+                f1.write(prefix+''.join(list_geom))
             with open('./files/gene_tbl.csv','w') as f2:
                 headers = 'Gene,Species\n,'+','.join(self.list_abbre)+'\n'
                 prefix_PCG = 'Length of PCGs (bp)\n'
@@ -547,6 +551,7 @@ class Save_files(Handle_GB,Extract_inf):
                          prefix_ter+'\n'.join(list_stop))
     def specie_select(self):
         if myargs.prefer != []:
+            print(myargs.prefer)
             for j in myargs.prefer:
                 with open('./files/'+j+'.csv','w') as f3:
                     f3.write(self.dict_spe_stat[j])
@@ -562,7 +567,7 @@ class Save_files(Handle_GB,Extract_inf):
         self.save_stat()
         self.specie_select()
     def save(self):
-        self.output_from_file()
+        self.output_from_file() 
         def remove_dir(path):
             filelist=os.listdir(path)  
             for f in filelist:
@@ -594,15 +599,15 @@ if __name__ == '__main__':
                 epilog = r'''
 examples:
 You can omit '-f' and '-r' under the premise of a GenBank file named 'sequences.gb' and a replace file named 'replace.txt' are placed in the dir of the scripts:
-    【muti-prefer species】 python D:\parseGB\bin\gb_parser.py -c 9 -p NC_030050 -p NC_016950 -p JQ038228 -aa -nuc -rRNA -tRNA -geom -table -order -name -stat -csv 
-    【muti-excluded species】python D:\parseGB\bin\gb_parser.py -c 9 -e NC_030050 -e NC_016950 -e JQ038228 -aa -nuc -rRNA -tRNA -geom -table -order -name -stat -csv 
+    【muti-prefer species】 python D:\parseGB\bin\gb_parser.py -c 9 -p NC_030050 NC_016950 JQ038228 -aa -nuc -rRNA -tRNA -geom -table -order -name -stat -csv 
+    【muti-excluded species】python D:\parseGB\bin\gb_parser.py -c 9 -e NC_030050 NC_016950 JQ038228 -aa -nuc -rRNA -tRNA -geom -table -order -name -stat -csv 
 Specify GenBank file and replace file:
     【only output AA sequence】 python D:\parseGB\bin\gb_parser.py -c 9 -f C:\users\sequences.gb -r C:\users\replace.txt -aa
     【specify the number of PCGs plus rRNAs】 python D:\parseGB\bin\gb_parser.py -c 9 -n 15 -f C:\users\sequences.gb -r C:\users\replace.txt -aa -nuc
     【specify type of the species name】 python D:\parseGB\bin\gb_parser.py -c 9 -t 2 -f C:\users\sequences.gb -r C:\users\replace.txt -table -order
     【use default codon table(1)】  python D:\parseGB\bin\gb_parser.py -t 2 -f C:\users\sequences.gb -r C:\users\replace.txt -table -order          
                 ''')
-        parser.add_argument('-f',dest ='file',help='input GenBank file',type=argparse.FileType('r'),default=scripts_path+'/sequences.gb')
+        parser.add_argument('-f',dest ='file',help='input GenBank file',type=argparse.FileType('r'),default=scripts_path+'/sequence.gb')
         parser.add_argument('-n',dest ='num',help='the amount of the protein plus rRNA genes among mtDNA',\
                             choices=[14,15],default=14,type=int) 
         parser.add_argument('-r',dest='replace',help='the replace file with unified gene names involved in',type=argparse.FileType('r'),default=scripts_path+'/replace.txt')
@@ -611,7 +616,7 @@ Specify GenBank file and replace file:
                             【2】by Genbank, for instance:>NC_014591                            
                             【3】by logogram,for instance:>B_hoshinai                            
                             【4】by latin_gb,for instance:>Benedenia_hoshinai_NC_014591''',\
-                            type=int,choices=[1,2,3,4],default=1)
+                            type=int,choices=[1,2,3,4],default=4)
         parser.add_argument('-c',dest='codontable',\
                             help='''choose a codon table!【1(default)|2|3|4|5|6|9|10|11|12|13|14|15|16|21|22|23】
                             NCBI GenBank codon table
@@ -636,9 +641,9 @@ Specify GenBank file and replace file:
                             '9', '10', '11', '12', '13', '14', '15', '16','21','22','23'],\
                             default='1')
         parser.add_argument('-e',dest='exclude',help='the gb number of the excluded species',\
-                            action='append',default=[])
+                            default=[],nargs='*')
         parser.add_argument('-p',dest='prefer',help='the gb number of the species that we prefer to its genome statistics',\
-                            action='append',default=[])
+                            default=[],nargs='*') 
         parser.add_argument('-aa',dest='AA',help='generate AA sequence files (fasta) of individual PCGs',\
                             default=False,action='store_true')
         parser.add_argument('-nuc',dest='NUC',help='generate nucleotide sequence files (fasta) of individual PCGs',\
