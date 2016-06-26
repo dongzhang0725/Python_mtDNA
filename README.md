@@ -71,9 +71,9 @@
 
     You can omit '-f' and '-r' under the premise of a GenBank file named 'sequences.gb' and a replace file named 'replace.txt' are placed in the dir of the scripts:
     
-        【muti-prefer species】 python D:\parseGB\bin\gb_parser.py -c 9 -p NC_030050 -p NC_016950 -p JQ038228 -aa -nuc -rRNA -tRNA -geom -table -order -name -stat -csv
+        【muti-prefer species】 python D:\parseGB\bin\gb_parser.py -c 9 -p NC_030050 NC_016950 JQ038228 -aa -nuc -rRNA -tRNA -geom -table -order -name -stat -csv
         
-        【muti-excluded species】python D:\parseGB\bin\gb_parser.py -c 9 -e NC_030050 -e NC_016950 -e JQ038228 -aa -nuc -rRNA -tRNA -geom -table -order -name -stat -csv
+        【muti-excluded species】python D:\parseGB\bin\gb_parser.py -c 9 -e NC_030050 NC_016950 JQ038228 -aa -nuc -rRNA -tRNA -geom -table -order -name -stat -csv
     
     Specify GenBank file and replace file:
     
