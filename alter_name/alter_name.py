@@ -43,6 +43,7 @@ examples:
                     line = f.readline()
                     line_num += 1
         for key,value in dict_name.items():
+            value = re.sub(r'\||[(]|[)]|"','',value)
             content = content.replace(key,value)
         myargs.out.write(content)
     myargs = parameter()                    
