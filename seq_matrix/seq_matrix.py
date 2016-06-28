@@ -131,7 +131,7 @@ class Get_results:
                 f5.write(self.phy_file)
         if myargs.nex:
             with open(scripts_path+'/seq_matrix_out/append.nex','w') as f6:
-                f6.write(self.nxs_file)
+                f6.write(self.nxs_file+';\nEND;\n')
         if myargs.paml:
             with open(scripts_path+'/seq_matrix_out/append.PML','w') as f7:
                 f7.write(self.paml_file)
