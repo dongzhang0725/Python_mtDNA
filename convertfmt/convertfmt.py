@@ -52,7 +52,7 @@ class Handle_file:
                 while not self.line.startswith('>'):  
                     self.line = self.f.readline()
                 self.name = self.line.strip('>').strip('\n').replace(' ','_')
-                self.name = re.sub(r'\||[(]|[)]|"','',self.name) 
+                self.name = re.sub(r'\||[(]|[)]|"|:','',self.name) 
                 self.seq = ''
                 self.line = self.f.readline()  
                 while not self.line.startswith('>') and self.line != '':
