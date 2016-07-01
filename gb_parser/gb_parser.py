@@ -111,14 +111,22 @@ class Extract_inf():
     def find_pos(self):
         list1 = re.findall(r'[0-9]+',self.i[1])     
         ini,ter = list1[0],list1[1]    
-        assert ini.isdigit() and ter.isdigit(),ini
-        start,stop = int(ini) - 1,int(ter) 
+        assert ini.isdigit() and ter.isdigit(),ini 
+        start,stop = int(ini)-1,int(ter)
         if self.i[1].startswith('complement'):
             if 'join' in self.i[1]:
                 assert len(list1) == 4,list1
-                seq = self.seq[start:stop] + self.seq[int(list1[2])-1:int(list1[3])]  
+                try:  
+                    codon_start = int(self.i[2]['codon_start'])
+                    seq = self.seq[start:stop] + self.seq[int(list1[2])-1:int(list1[3])-codon_start+1]
+                except KeyError:
+                    seq = self.seq[start:stop] + self.seq[int(list1[2])-1:int(list1[3])]  
             else:
-                seq = self.seq[start:stop]  
+                try:  
+                    codon_start = int(self.i[2]['codon_start'])
+                    seq = self.seq[start:stop-codon_start+1] 
+                except KeyError:
+                    seq = self.seq[start:stop]                 
             seq = seq[::-1].upper() 
             gene_seq = ''
             dict1 = {"A":"T","T":"A","C":"G","G":"C"}
@@ -131,9 +139,17 @@ class Extract_inf():
         else:
             if 'join' in self.i[1]:
                 assert len(list1) == 4,list1
-                return self.seq[start:stop] + self.seq[int(list1[2])-1:int(list1[3])]  
+                try:  
+                    codon_start = int(self.i[2]['codon_start'])
+                    return self.seq[start+codon_start-1:stop] + self.seq[int(list1[2])-1:int(list1[3])]
+                except KeyError:              
+                    return self.seq[start:stop] + self.seq[int(list1[2])-1:int(list1[3])]  
             else:
-                return self.seq[start:stop]  
+                try:  
+                    codon_start = int(self.i[2]['codon_start'])
+                    return self.seq[start+codon_start-1:stop]
+                except KeyError:
+                    return self.seq[start:stop]   
     
     def substitute(self):
         self.dict_replace = {}
