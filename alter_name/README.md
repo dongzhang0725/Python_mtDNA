@@ -29,4 +29,6 @@ optional arguments:
 你可能还没注意到本文每部分之间的分割线和 `其他` 的链接其实没有链接
 我爱 `分割线`， 我爱 [**链接**][null-link]，哪怕它只有颜色~
 
+我：我也没读过，但是， [***Jane Eyre***](http://book.douban.com/subject/1141406/) is not just ***Jane Eyre***
+![](http://img3.douban.com/mpic/s1108264.jpg)
 [null-link]: chrome://not-a-link
