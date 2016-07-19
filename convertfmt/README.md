@@ -20,7 +20,7 @@
               
               -out      folder of the out files
 
-`【python 3.4.3】`
+【python 3.4.3】
 
 **Usage example:**
 
