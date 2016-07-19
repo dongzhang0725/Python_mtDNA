@@ -1,8 +1,8 @@
 #convertfmt.py
 
-`Description:`Convert fasta file to selected format `【phylip|nexus|paml|axt】`
+**Description:** Convert fasta file to selected format `【phylip|nexus|paml|axt】`
 
-optional arguments:
+**optional arguments:**
 
               -h:       --help  show this help message and exit
               
@@ -22,7 +22,7 @@ optional arguments:
 
 `【python 3.4.3】`
 
-`Usage example:`
+**Usage example:**
 
             1.python C:\Users\Administrator\Desktop\scripts\convertfmt.py -f C:\Users\Administrator\Desktop\scripts\demo.fasta -phy
             
