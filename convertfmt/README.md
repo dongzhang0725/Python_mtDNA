@@ -17,6 +17,8 @@ optional arguments:
               -axt:     convert into axt format
               
               -stat:    generate statistics of the fasta file
+              
+              -out      folder of the out files
 
 `【python 3.4.3】`
 
@@ -26,4 +28,4 @@ optional arguments:
             
             2.python C:\Users\Administrator\Desktop\scripts\convertfmt.py -f demo.fasta -phy -nex -paml -axt -stat
             
-            3.3.python C:\Users\Administrator\Desktop\scripts\convertfmt.py -f C:\Users\Administrator\Desktop\scripts\fas-folder -nex
+            3.python C:\Users\Administrator\Desktop\scripts\convertfmt.py -f C:\Users\Administrator\Desktop\scripts\fas-folder -nex
