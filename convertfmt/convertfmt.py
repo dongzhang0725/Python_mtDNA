@@ -62,16 +62,16 @@ class Handle_file:
                 self.assign()    
     def save(self,inputfile):
         if myargs.phy:
-            with open(myargs.out+'/'+os.path.basename(inputfile).split('.')[0]+'.phy','w') as f1:
+            with open(myargs.out+'/'+os.path.splitext(os.path.basename(inputfile))[0]+'.phy','w') as f1:
                 f1.write(self.phy)
         if myargs.nex:
-            with open(myargs.out+'/'+os.path.basename(inputfile).split('.')[0]+'.nex','w') as f2:
+            with open(myargs.out+'/'+os.path.splitext(os.path.basename(inputfile))[0]+'.nex','w') as f2:
                 f2.write(self.nex)
         if myargs.paml:
-            with open(myargs.out+'/'+os.path.basename(inputfile).split('.')[0]+'.PML','w') as f3:
+            with open(myargs.out+'/'+os.path.splitext(os.path.basename(inputfile))[0]+'.PML','w') as f3:
                 f3.write(self.paml)
         if myargs.axt:
-            with open(myargs.out+'/'+os.path.basename(inputfile).split('.')[0]+'.axt','w') as f4:
+            with open(myargs.out+'/'+os.path.splitext(os.path.basename(inputfile))[0]+'.axt','w') as f4:
                 f4.write(self.axt)
         if myargs.stat:
             with open(myargs.out+'./statistics.csv','w') as f5:
@@ -101,7 +101,7 @@ if __name__ == '__main__':
                             default=False,action='store_true') 
         parser.add_argument('-stat',dest ='stat',help='generate statistics of the fasta file',\
                             default=False,action='store_true')
-        parser.add_argument('-o',dest='out',help='folder of the out file',default=scripts_path+'/batch_out')
+        parser.add_argument('-o',dest='out',help='folder of the out files',default=scripts_path+'/batch_out')
         myargs = parser.parse_args(sys.argv[1:])
         return myargs
     myargs = parameter()
