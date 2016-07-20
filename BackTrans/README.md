@@ -1,10 +1,10 @@
 # BackTrans.py 
 
-`Description:`Volume back translate AA sequences   
+**Description:** Volume back translate AA sequences   
 
-`【python 3.4.3】`
+**【python 3.4.3】**
 
-`Usage example:`
+**Usage example:**
 
             1.python C:\Users\Administrator\Desktop\scripts\backtrans.py -AAin F:\software\mafft\mafft-win\pro -NUCin C:\Users\Administrator\Desktop\nuc -s fast a -c 2   【for folder】
                         		
