@@ -1,11 +1,11 @@
 #gb_parser.py
-`【python 3.4.3】`  `biopython must be enabled`
+【python 3.4.3】  `biopython must be enabled`
 
-`usage:``gb_parser.py [-h] [-f FILE] [-n {14,15}] [-r REPLACE] [-t {1,2,3,4}] [-c {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,21,22,23}] [-e EXCLUDE] [-p PREFER] [-aa] [-nuc] [-rRNA] [-tRNA] [-geom] [-table] [-order] [-name] [-stat] [-csv]`
+**usage:** `gb_parser.py [-h] [-f FILE] [-n {14,15}] [-r REPLACE] [-t {1,2,3,4}] [-c {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,21,22,23}] [-e EXCLUDE] [-p PREFER] [-aa] [-nuc] [-rRNA] [-tRNA] [-geom] [-table] [-order] [-name] [-stat] [-csv]`
 
-`Description:` Parse GenBank file to extract interested information
+**Description:** Parse GenBank file to extract interested information
 
-`optional arguments:`
+**optional arguments:**
 
                     -h, --help            show this help message and exit
                     
@@ -67,7 +67,7 @@
                     -csv                  generate csv files about the nucleotide sequence of PCGs, rRNAs and tRNAs
 
 
-`Usage example:`
+**Usage example:**
 
     You can omit '-f' and '-r' under the premise of a GenBank file named 'sequences.gb' and a replace file named 'replace.txt' are placed in the dir of the scripts:
     
