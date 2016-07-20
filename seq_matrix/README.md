@@ -1,8 +1,8 @@
 #seq_matrix.py
 
-`Description:` Concatenated muti-sequences into one file
+**Description:** Concatenated muti-sequences into one file
 
-`optional arguments:`
+**optional arguments:**
 
 	-h	--help  show this help message and exit
 	
@@ -22,11 +22,11 @@
 	
 	-part	generate partition file
 
-`【python 3.4.3】`
+【python 3.4.3】
 
-The output file will be deposited in the dir of seq_matrix_out
+`The output file will be deposited in the dir of seq_matrix_out`
 
-`Usage example:`
+**Usage example:**
 
 	1.python C:\Users\Administrator\Desktop\scripts\seq_matrix.py -f C:\Users\Administrator\Desktop\scripts\partitions -phy
 
