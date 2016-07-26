@@ -43,9 +43,9 @@ class Get_results:
             print('''ERROR:Can't find %s in 【%s】'''%(str(lack),self.each))
     def add(self):
         span = re.search(self.seq + '$',self.dict_species[self.spe_key]).span()
-        self.partition_style += os.path.basename(self.each).split('.')[0] + '=' + str(span[0]+1) + '-' + str(span[1]) + ';\n'
-        self.bayes_style += 'charset ' + os.path.basename(self.each).split('.')[0] + '=' + str(span[0]+1) + '-' + str(span[1]) + ';\n'
-        self.partition_name += os.path.basename(self.each).split('.')[0]+','
+        self.partition_style += os.path.splitext(os.path.basename(self.each))[0] + '=' + str(span[0]+1) + '-' + str(span[1]) + ';\n'
+        self.bayes_style += 'charset ' + os.path.splitext(os.path.basename(self.each))[0] + '=' + str(span[0]+1) + '-' + str(span[1]) + ';\n'
+        self.partition_name += os.path.splitext(os.path.basename(self.each))[0]+','
         print('%s done!'%os.path.basename(self.each))
     def each_file(self):
         for self.each in self.filename:
