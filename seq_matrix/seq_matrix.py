@@ -4,6 +4,7 @@
 __date__  =  '2016年3月27日'
 __author__  =  'zhang dong;708986950@qq.com'
 
+
 class Get_results:    
     def __init__(self):
         self.filename = list(map(lambda x:myargs.folder+'/'+x,sorted(os.listdir(myargs.folder))))  
@@ -13,6 +14,7 @@ class Get_results:
         self.bayes_style = '【bayes style】\n'
         self.partition_name = '' 
         self.count = 0
+        self.gene_index = []
     def handle(self):
         while self.line != '':
             self.spe_key = self.line.strip().replace('>','')
@@ -43,6 +45,7 @@ class Get_results:
             print('''ERROR:Can't find %s in 【%s】'''%(str(lack),self.each))
     def add(self):
         span = re.search(self.seq + '$',self.dict_species[self.spe_key]).span()
+        self.gene_index.append(span)
         self.partition_style += os.path.splitext(os.path.basename(self.each))[0] + '=' + str(span[0]+1) + '-' + str(span[1]) + ';\n'
         self.bayes_style += 'charset ' + os.path.splitext(os.path.basename(self.each))[0] + '=' + str(span[0]+1) + '-' + str(span[1]) + ';\n'
         self.partition_name += os.path.splitext(os.path.basename(self.each))[0]+','
@@ -56,7 +59,7 @@ class Get_results:
                 self.line = self.f.readline()
                 self.dict_statistics['prefix'] += '\t'+os.path.basename(self.each)  
                 self.handle()
-                self.lack()   
+                self.lack()  
             self.add()           
     def judge(self):
         DNA = re.search(r'[ATCG]{20}',self.seq,re.I)  
@@ -74,6 +77,22 @@ class Get_results:
             self.align_seq = '\n'.join(list_seq) + '\n'
         else:
             self.align_seq = '\n'.join(list_seq) +'\n' + seq[-remainder:] + '\n'
+    def nxs_interleave(self):
+        length = len(self.dict_species[self.list_keys[-1]]) 
+        integer = length//60
+        num = 1
+        while num <= integer:
+            for i in self.list_keys:
+                self.nxs_inter += i+' '+self.dict_species[i][(num-1)*60:num*60]+'\n'
+            self.nxs_inter += "\n"
+            num += 1    
+        if length%60 != 0:
+            for i in self.list_keys:
+                self.nxs_inter += i+' '+self.dict_species[i][(num-1)*60:length]+'\n'
+        for each_span in self.gene_index: 
+            for i in self.list_keys:
+                self.nxs_gene += i + " " + self.dict_species[i][each_span[0]:each_span[1]] + "\n"
+            self.nxs_gene += "\n"                 
     def get_str(self):
         for i in self.list_keys:
             self.num += 1
@@ -85,6 +104,7 @@ class Get_results:
             self.paml_file += i + '\n' + self.align_seq + '\n'
             self.axt_file += self.dict_species[i] + '\n'
             self.statistics += self.dict_statistics[i]
+            
     def complete(self):
         self.partition_name = 'partition Names = %s:'%str(self.count)+self.partition_name.strip(',')+';\nset partition=Names;'  
         self.dict_statistics['prefix'] += '\tTotal lenth\tNo of charsets\n'
@@ -93,11 +113,14 @@ class Get_results:
         self.file = ''
         self.phy_file = ' '+str(len(self.list_keys))+' '+str(len(self.dict_species[self.list_keys[-1]])) + '\n'
         self.nxs_file = '#NEXUS\nBEGIN DATA;\ndimensions ntax=%s nchar=%s;\nformat missing=?\ndatatype=%s gap= -;\n\nmatrix\n'%(str(len(self.list_keys)),str(len(self.dict_species[self.list_keys[-1]])),self.pattern)
+        self.nxs_inter = '#NEXUS\nBEGIN DATA;\ndimensions ntax=%s nchar=%s;\nformat missing=?\ndatatype=%s gap= - interleave;\n\nmatrix\n'%(str(len(self.list_keys)),str(len(self.dict_species[self.list_keys[-1]])),self.pattern)        
+        self.nxs_gene = '#NEXUS\nBEGIN DATA;\ndimensions ntax=%s nchar=%s;\nformat missing=?\ndatatype=%s gap= - interleave;\n\nmatrix\n'%(str(len(self.list_keys)),str(len(self.dict_species[self.list_keys[-1]])),self.pattern)                
         self.paml_file = str(len(self.list_keys))+'  '+str(len(self.dict_species[self.list_keys[-1]])) + '\n\n'
         self.axt_file = '-'.join(self.list_keys) + '\n'
         self.statistics = self.dict_statistics['prefix']
         self.num = 0
         self.get_str()
+        self.nxs_interleave()
     def save(self):
         def remove_dir(path):
             filelist=os.listdir(path)  
@@ -135,6 +158,13 @@ class Get_results:
         if myargs.paml:
             with open(scripts_path+'/seq_matrix_out/append.PML','w') as f7:
                 f7.write(self.paml_file)
+        if myargs.nex2:
+            with open(scripts_path+'/seq_matrix_out/append_interleave.nex','w') as f8:
+                f8.write(self.nxs_inter+';\nEND;\n')        
+        if myargs.nex3:
+            with open(scripts_path+'/seq_matrix_out/append_inter_gene.nex','w') as f9:
+                f9.write(self.nxs_gene+';\nEND;\n')
+        
 if __name__ == '__main__':   
     import os,re,argparse,sys,shutil
     scripts_path = os.path.dirname(sys.argv[0]) if os.path.dirname(sys.argv[0]) else '.'
@@ -168,13 +198,17 @@ examples:
                             default=False,action='store_true')
         parser.add_argument('-part',dest ='partition',help='generate partition file',\
                             default=False,action='store_true')
+        parser.add_argument('-nex2',dest ='nex2',help='generate interleave nexus format',\
+                            default=False,action='store_true')
+        parser.add_argument('-nex3',dest ='nex3',help='generate interleave nexus format delimited by genes',\
+                            default=False,action='store_true')
         myargs = parser.parse_args(sys.argv[1:])
         return myargs
     myargs = parameter()
     def main():
         myresult = Get_results()
         myresult.each_file() 
-        myresult.complete()
+        myresult.complete() 
         myresult.save() 
     main()    
     print('completed!')
