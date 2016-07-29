@@ -200,7 +200,7 @@ examples:
                             default=False,action='store_true')
         parser.add_argument('-nex2',dest ='nex2',help='generate interleave nexus format',\
                             default=False,action='store_true')
-        parser.add_argument('-nex3',dest ='nex3',help='generate interleave nexus format delimited by genes',\
+        parser.add_argument('-nex3',dest ='nex3',help='generate interleave nexus format delimited by genes, so as to run Best',\
                             default=False,action='store_true')
         myargs = parser.parse_args(sys.argv[1:])
         return myargs
