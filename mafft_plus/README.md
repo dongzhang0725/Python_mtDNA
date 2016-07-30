@@ -1,4 +1,8 @@
-**usage:** mafft_plus.py [-h] [-f FILE] [-table {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,21,22,23}] [-mafft MAFFT] [-codon]
+#mafft_plus.py
+~~~
+【python 3.4.3】  `biopython must be enabled`
+
+**usage:** `mafft_plus.py [-h] [-f FILE] [-table {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,21,22,23}] [-mafft MAFFT] [-codon]`
 
 **Description:** Add codon alignment and batch run to mafft
 
