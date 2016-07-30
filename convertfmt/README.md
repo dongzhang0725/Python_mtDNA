@@ -6,7 +6,7 @@
 
               -h:       --help  show this help message and exit
               
-              -f:       input fasta file
+              -f:       input fasta file or folder
               
               -phy:     convert into phylip format
               
