@@ -1,5 +1,5 @@
 #gb_parser.py
-【python 3.4.3】  【python 3.4.3】 [**biopython**][hover] must be enabled 
+【python 3.4.3】 [**biopython**][hover] must be enabled 
 [hover]:http://biopython.org/wiki/Download "download biopython"
 
 **usage:** `gb_parser.py [-h] [-f FILE] [-n {14,15}] [-r REPLACE] [-t {1,2,3,4}] [-c {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,21,22,23}] [-e EXCLUDE] [-p PREFER] [-aa] [-nuc] [-rRNA] [-tRNA] [-geom] [-table] [-order] [-name] [-stat] [-csv]`
