@@ -12,6 +12,10 @@
 	
 	-nex	generate nexus format
 	
+	-nex2   generate interleave nexus format
+	
+	-nex3   generate interleave nexus format delimited by genes, so as to run Best
+	
 	-paml	generate paml format
 	
 	-axt	generate axt format
