@@ -42,9 +42,9 @@
 
 *Normal align (the output file will be deposited in the mafft_out folder of scripts directionary):*
 
-    【single file】 python C:\Users\Desktop\mafft_plus.py -f C:\Users\Desktop\demo.fasta
+    【single file】 python C:\Users\Desktop\mafft_plus.py -f C:\Users\Desktop\demo.fasta -mafft C:\Users\Desktop\mafft-win\mafft.bat
 	
-    【input folder】 python C:\Users\Desktop\mafft_plus.py -f C:\Users\Desktop\align
+    【input folder】 python C:\Users\Desktop\mafft_plus.py -f C:\Users\Desktop\align -mafft C:\Users\Desktop\mafft-win\mafft.bat
 
 *Codon align (the output file will be deposited in the codon_alignments folder of scripts directionary):*
 
