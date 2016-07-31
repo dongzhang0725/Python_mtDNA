@@ -53,7 +53,6 @@
     【input folder】 python C:\Users\Desktop\mafft_plus.py -f C:\Users\Desktop\align -table 1 -mafft C:\Users\Desktop\mafft.bat -codon
     
     
- #mafft_plus.py#
 
 
 >* 本脚本是通过[**python3.43**][dowload]编写，请下载python3及其以上的版本。
