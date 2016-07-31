@@ -65,6 +65,8 @@
 [github]:https://github.com/dongzhang0725/Python_mtDNA/tree/master/mafft_plus "推荐" 
 [yunpan]:http://pan.baidu.com/s/1mhN2ene "密码：nsj4" 
 
+>* 如有任何疑问，请联系作者：dongzhang0725@gmail.com
+
 ##新增功能
 本脚本在mafft原有功能基础上
 
