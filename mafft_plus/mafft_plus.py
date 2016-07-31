@@ -33,7 +33,7 @@ class Make_dir(object):
 class Read_fas(object): 
     def __init__(self): 
         self.dict_file = {} 
-        self.table = CodonTable.ambiguous_dna_by_id[int(myargs.codontable)]
+        self.table = CodonTable.ambiguous_dna_by_id[myargs.codontable]
     def handle(self,file):
         self.dict_fas = {} 
         with open(file) as File:
@@ -54,7 +54,8 @@ class Read_fas(object):
         for each_aa in pro:
             self.dict_file[self.each_file][spe].append((each_aa,nuc[(num-1)*3:num*3]))
             num += 1
-    def trim_ter(self,spe,seq): 
+    def trim_ter(self,spe,seq):
+        seq = seq.replace("-","")
         size = len(seq)
         if size % 3 == 0:
             if _translate_str(seq[-3:], self.table) == "*":
