@@ -54,6 +54,7 @@
     
 ---
 
+
 >* 本脚本是通过[**python3.43**][dowload]编写，请下载python3及其以上的版本。
 [dowload]:https://www.python.org/downloads/release/python-343/ "python3.43下载"
 
@@ -91,6 +92,10 @@
 
 >* 如果用户传入的核苷酸序列是比对过的（即序列内部含有gap），在codon比对模式下，脚本会将其转换为比对前的状态
 
+>* 密码子的翻译采用了扩展的遗传密码表，可以灵活地处理有简并碱基的情况，如标准密码表的ATH（ATA/ATC/ATT）翻译为Ile；还有其他更复杂的情况参考[**这里**][path]
+[path]: http://biopython.org/DIST/docs/api/Bio.Alphabet.IUPAC.ExtendedIUPACProtein-class.html 
+  
+
 >* 普通模式比对结果存在脚本目录的mafft\_out文件夹内；codon模式比对结果保存在脚本目录的codon\_alignments文件夹内，同时vessel文件夹内保存的是翻译后的氨基酸序列AA\_sequence和mafft比对后的氨基酸序列AA\_alignments
 
 >* 所有参数均有默认设置（如果用户不输入参数时即执行默认设置）
@@ -116,4 +121,5 @@
 	- 传入文件夹
 		- `python C:\Users\Desktop\mafft_plus.py -f C:\Users\Desktop\align -table 1 -mafft C:\Users\Desktop\mafft-win\mafft.bat -codon`
 		- `python C:\Users\Desktop\mafft_plus.py`【懒人模式】
+
 
