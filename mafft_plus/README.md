@@ -63,8 +63,8 @@
 >* 密码子的翻译是通过[**biopython**][hover]实现的,请安装biopython模块。
 [hover]:http://biopython.org/wiki/Download "biopython模块安装方法" 
 
->* 脚本及相关文件下载地址：[**Github**][github] 或者 [**百度云盘**][yunpan](密码nsj4）
-[github]:https://github.com/dongzhang0725/Python_mtDNA/tree/master/mafft_plus "推荐" 
+>* 脚本及相关文件下载地址：[**Github**][github]（推荐,实时更新） 或者 [**百度云盘**][yunpan](密码nsj4）
+[github]:https://github.com/dongzhang0725/Python_mtDNA/tree/master/mafft_plus "推荐,实时更新" 
 [yunpan]:http://pan.baidu.com/s/1mhN2ene "密码：nsj4" 
 
 >* 如有任何疑问，请联系作者：dongzhang0725@gmail.com
@@ -101,7 +101,7 @@
   
 >* 脚本自动判断序列末尾是否为终止子，如果是，会将自动截掉终止子
 
->* 当序列内部含有终止子时，会报错
+>* 当序列内部含有终止子时，会报错并给出详细的位置信息
 
 >* 普通模式比对结果存在脚本目录的mafft\_out文件夹内；codon模式比对结果保存在脚本目录的codon\_alignments文件夹内，同时vessel文件夹内保存的是翻译后的氨基酸序列AA\_sequence和mafft比对后的氨基酸序列AA\_alignments
 
@@ -128,6 +128,5 @@
 	- 传入文件夹
 		- `python C:\Users\Desktop\mafft_plus.py -f C:\Users\Desktop\align -table 1 -mafft C:\Users\Desktop\mafft-win\mafft.bat -codon`
 		- `python C:\Users\Desktop\mafft_plus.py`【懒人模式】
-
 
 
