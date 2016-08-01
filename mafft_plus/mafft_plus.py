@@ -73,7 +73,11 @@ class Read_fas(object):
         aa_fas = ""
         for i in list_keys:
             self.trim_ter(i,self.dict_fas[i]) 
-            protein = _translate_str(self.trim_seq, self.table) 
+            protein = _translate_str(self.trim_seq, self.table)
+            if "*" in protein:
+                pos_num = protein.index("*")
+                print("***********\nWARNING:internal stop codon was found at %d-%d 【species:%s,file:%s】\n***********"%(((pos_num+1)*3-2),(pos_num+1)*3,i.strip().strip(">"),self.each_file))
+                raise AssertionError 
             aa_fas += i + protein + os.linesep
             self.mapping(i,self.trim_seq, protein)
         with open(scripts_path+"/vessel/AA_sequence/" + self.each_file,"w") as f:
